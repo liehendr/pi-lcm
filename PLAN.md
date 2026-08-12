@@ -751,17 +751,18 @@ pi-lossless-context/
 ```json
 {
   "dependencies": {
-    "better-sqlite3": "^11.0.0"
+    "better-sqlite3": "^13.0.3"
   },
   "peerDependencies": {
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-coding-agent": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
     "@sinclair/typebox": "*"
   },
   "devDependencies": {
-    "vitest": "^3.0.0",
-    "typescript": "^5.7.0",
-    "@types/better-sqlite3": "^7.6.0"
+    "vitest": "^4.1.10",
+    "typescript": "^7.0.2",
+    "@types/better-sqlite3": "^9.6.0"
   }
 }
 ```

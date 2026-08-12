@@ -3,7 +3,6 @@
  */
 
 import { Type } from "@sinclair/typebox";
-import { StringEnum } from "@mariozechner/pi-ai";
 import type { LcmStore, SearchResult } from "../db/store.js";
 import { extractSnippet, timeAgo } from "../utils.js";
 
@@ -24,10 +23,10 @@ export function createLcmGrepTool(
     get promptGuidelines() { return getGuidelines(); },
     parameters: Type.Object({
       query: Type.String({ description: "Search query (regex pattern or text)" }),
-      mode: StringEnum(["regex", "text"] as const, {
+      mode: Type.Union(["regex", "text"].map((v) => Type.Literal(v)), {
         description: "Search mode: 'text' for FTS5 search, 'regex' for pattern matching",
       }),
-      scope: StringEnum(["messages", "summaries", "all"] as const, {
+      scope: Type.Union(["messages", "summaries", "all"].map((v) => Type.Literal(v)), {
         description: "Where to search",
       }),
       limit: Type.Optional(Type.Number({ description: "Max results (default 20)" })),

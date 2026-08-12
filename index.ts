@@ -8,8 +8,8 @@
  * Fix H1: message_end has no entryId — always pass null.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { complete } from "@mariozechner/pi-ai";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { complete } from "@earendil-works/pi-ai/compat";
 import { resolveConfig, type LcmConfig } from "./src/config.js";
 import { openDb, closeDb, checkpointDb } from "./src/db/connection.js";
 import { runMigrations } from "./src/db/schema.js";
@@ -179,26 +179,10 @@ export default function (pi: ExtensionAPI) {
     }
   });
 
-  // Legacy handlers: only fire on old Pi (removed in new Pi, never called)
-  pi.on("session_switch", async (_event: any, ctx: any) => {
-    resetState();
-    try {
-      initializeSession(ctx);
-    } catch (e: any) {
-      console.error("[LCM] Re-init failed on session switch:", e.message);
-      resetState();
-    }
-  });
-
-  pi.on("session_fork", async (_event: any, ctx: any) => {
-    resetState();
-    try {
-      initializeSession(ctx);
-    } catch (e: any) {
-      console.error("[LCM] Re-init failed on session fork:", e.message);
-      resetState();
-    }
-  });
+  // Legacy handlers were removed: session_switch / session_fork are not part of the
+  // new Pi event API (only session_before_switch / session_before_fork exist, with a
+  // different shape). Session transitions on new Pi are detected via session_start's
+  // event.reason, handled above.
 
   pi.on("session_shutdown", async (_event: any, _ctx: any) => {
     resetState();

@@ -3,7 +3,6 @@
  */
 
 import { Type } from "@sinclair/typebox";
-import { StringEnum } from "@mariozechner/pi-ai";
 import type { LcmStore } from "../db/store.js";
 import { timeAgo } from "../utils.js";
 
@@ -20,7 +19,7 @@ export function createLcmDescribeTool(
       "time range or topic area.",
     promptSnippet: "Get summaries of conversation sections with DAG lineage",
     parameters: Type.Object({
-      section: StringEnum(["overview", "recent", "earliest", "by_id"] as const, {
+      section: Type.Union(["overview", "recent", "earliest", "by_id"].map((v) => Type.Literal(v)), {
         description: "Which section to describe",
       }),
       summary_id: Type.Optional(

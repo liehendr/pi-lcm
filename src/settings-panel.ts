@@ -6,7 +6,7 @@
  * Panel.onClose must be wired to done() by the caller.
  */
 
-import { matchesKey, Key, truncateToWidth } from "@mariozechner/pi-tui";
+import { matchesKey, Key, truncateToWidth } from "@earendil-works/pi-tui";
 import type { LcmConfig } from "./config.js";
 import type { SettingsScope } from "./settings.js";
 import type { LcmStats } from "./db/store.js";
