@@ -31,8 +31,11 @@ pi-lcm fixes this. Every message is stored permanently in SQLite. When compactio
 ## Install
 
 ```bash
-# From npm (published package)
+# From npm (the original upstream package, not this fork)
 pi install npm:pi-lcm
+
+# From Git (this fork)
+pi install git:github.com/liehendr/pi-lcm
 ```
 
 ### Local install
@@ -40,7 +43,7 @@ pi install npm:pi-lcm
 Install directly from a local checkout — no npm publish needed:
 
 ```bash
-git clone https://github.com/codexstar69/pi-lcm.git
+git clone https://github.com/liehendr/pi-lcm.git
 cd pi-lcm
 pnpm install
 pi install ./
@@ -184,7 +187,7 @@ Configure custom models in settings.json under `compactionModels`.
 > manager; Bun is only the test/runtime.
 
 ```bash
-git clone https://github.com/codexstar69/pi-lcm.git
+git clone https://github.com/liehendr/pi-lcm.git
 cd pi-lcm
 pnpm install
 pnpm test             # 46 tests (via bun test)
