@@ -7,7 +7,7 @@
   <!-- BADGES:START -->
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://www.npmjs.com/package/pi-lcm"><img src="https://img.shields.io/npm/v/pi-lcm.svg" alt="npm version"></a>
-  <img src="https://img.shields.io/badge/TypeScript-5.x-blue.svg" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TypeScript-7.x-blue.svg" alt="TypeScript">
   <img src="https://img.shields.io/badge/Pi-0.58+-purple.svg" alt="Pi 0.58+">
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
   <!-- BADGES:END -->
@@ -37,7 +37,7 @@ pi install npm:pi-lcm
 # From source (development)
 git clone https://github.com/codexstar69/pi-lcm.git
 cd pi-lcm
-bun install
+pnpm install
 pi -e ./index.ts
 ```
 
@@ -165,11 +165,16 @@ Configure custom models in settings.json under `compactionModels`.
 
 ## Development
 
+> **Runtime requirement:** `pi` runs on an embedded Bun runtime, and the extension's
+> storage layer uses Bun's built-in `bun:sqlite` (SQLite, FTS5, no native addons).
+> You'll need the `bun` CLI installed to run the test suite. **pnpm** is the package
+> manager; Bun is only the test/runtime.
+
 ```bash
 git clone https://github.com/codexstar69/pi-lcm.git
 cd pi-lcm
-bun install
-bun run test          # 46 tests
+pnpm install
+pnpm test             # 46 tests (via bun test)
 pi -e ./index.ts      # Load in Pi for testing
 ```
 

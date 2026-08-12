@@ -11,11 +11,15 @@ Thanks for your interest in contributing.
 
 ## Development Setup
 
+> **Runtime requirement:** `pi` runs on an embedded Bun runtime, and pi-lcm's storage
+> layer uses Bun's built-in `bun:sqlite`. You'll need the `bun` CLI installed to run
+> the tests. **pnpm** is the package manager; Bun is only the test/runtime.
+
 ```bash
 git clone https://github.com/codexstar69/pi-lcm.git
 cd pi-lcm
-bun install
-bun run test
+pnpm install
+pnpm test
 ```
 
 To test inside Pi:
@@ -54,15 +58,15 @@ src/
 ## Pull Request Guidelines
 
 1. Keep PRs focused. One concern per PR.
-2. Run tests: `bun run test`
+2. Run tests: `pnpm test`
 3. Update CHANGELOG.md with your changes.
 4. Follow existing code style (no formatter enforced, just be consistent).
 
 ## Testing
 
 ```bash
-bun run test              # Run all 46 tests
-bun run test:watch        # Watch mode
+pnpm test              # Run all 46 tests
+pnpm test:watch        # Watch mode
 ```
 
-Tests use vitest with in-memory SQLite databases. No external dependencies needed.
+Tests use Bun's built-in test runner (`bun test`) with in-memory SQLite databases (`bun:sqlite`). No native add-ons needed.
