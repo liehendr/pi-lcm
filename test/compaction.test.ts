@@ -1,19 +1,19 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import Database from "better-sqlite3";
+import { describe, it, expect, beforeEach, afterEach } from "bun:test";
+import { Database } from "bun:sqlite";
 import { LcmStore } from "../src/db/store.js";
 import { runMigrations } from "../src/db/schema.js";
 import { CompactionEngine, type CompactionDeps } from "../src/compaction/engine.js";
 import { resolveConfig, type LcmConfig } from "../src/config.js";
 import { assembleSummary } from "../src/compaction/assembler.js";
 
-let db: Database.Database;
+let db: Database;
 let store: LcmStore;
 let config: LcmConfig;
 
 beforeEach(() => {
   db = new Database(":memory:");
-  db.pragma("journal_mode = WAL");
-  db.pragma("foreign_keys = ON");
+  db.exec("PRAGMA journal_mode = WAL");
+  db.exec("PRAGMA foreign_keys = ON");
   runMigrations(db);
   store = new LcmStore(db);
   config = {

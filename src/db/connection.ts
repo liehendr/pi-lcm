@@ -4,19 +4,19 @@
  * Fix 15: PASSIVE checkpoint on close, TRUNCATE after compaction.
  */
 
-import Database from "better-sqlite3";
+import { Database } from "bun:sqlite";
 import { mkdirSync, chmodSync } from "fs";
 import { join } from "path";
 import { hashCwd } from "../utils.js";
 
-let db: Database.Database | null = null;
+let db: Database | null = null;
 let currentCwd: string | null = null;
 
 export function getDbPath(dbDir: string, cwd: string): string {
   return join(dbDir, `${hashCwd(cwd)}.db`);
 }
 
-export function openDb(dbDir: string, cwd: string): Database.Database {
+export function openDb(dbDir: string, cwd: string): Database {
   // Fix 8: If already open for a different cwd, close first
   if (db && currentCwd !== cwd) {
     closeDb();
@@ -33,10 +33,10 @@ export function openDb(dbDir: string, cwd: string): Database.Database {
   try { chmodSync(dbPath, 0o600); } catch { /* may fail on some FS */ }
 
   // Connection pragmas
-  db.pragma("journal_mode = WAL");
-  db.pragma("busy_timeout = 5000");
-  db.pragma("foreign_keys = ON");
-  db.pragma("synchronous = NORMAL");
+  db.exec("PRAGMA journal_mode = WAL");
+  db.exec("PRAGMA busy_timeout = 5000");
+  db.exec("PRAGMA foreign_keys = ON");
+  db.exec("PRAGMA synchronous = NORMAL");
 
   ensureMetadata(db, cwd);
   currentCwd = cwd;
@@ -48,7 +48,7 @@ export function closeDb(): void {
   if (!db) return;
   try {
     // Fix 15: PASSIVE on close (non-blocking, won't fail if readers exist)
-    db.pragma("wal_checkpoint(PASSIVE)");
+    db.exec("PRAGMA wal_checkpoint(PASSIVE)");
   } catch { /* non-fatal */ }
   try {
     db.close();
@@ -61,11 +61,11 @@ export function closeDb(): void {
 export function checkpointDb(): void {
   if (!db) return;
   try {
-    db.pragma("wal_checkpoint(TRUNCATE)");
+    db.exec("PRAGMA wal_checkpoint(TRUNCATE)");
   } catch { /* non-fatal */ }
 }
 
-function ensureMetadata(database: Database.Database, cwd: string): void {
+function ensureMetadata(database: Database, cwd: string): void {
   database.prepare(
     `CREATE TABLE IF NOT EXISTS _metadata (
       key   TEXT PRIMARY KEY,

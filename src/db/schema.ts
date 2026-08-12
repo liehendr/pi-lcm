@@ -4,12 +4,12 @@
  * Fix 23: Atomic FTS5 setup with SAVEPOINT.
  */
 
-import type Database from "better-sqlite3";
+import type { Database } from "bun:sqlite";
 import { createHash } from "crypto";
 
 const SCHEMA_VERSION = 2;
 
-export function runMigrations(db: Database.Database): void {
+export function runMigrations(db: Database): void {
   const hasVersionTable = db
     .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='_schema_version'")
     .get();
@@ -38,7 +38,7 @@ export function runMigrations(db: Database.Database): void {
   migrate();
 }
 
-function applyV1(db: Database.Database): void {
+function applyV1(db: Database): void {
   db.prepare(
     `CREATE TABLE IF NOT EXISTS _schema_version (
       version INTEGER NOT NULL
@@ -110,7 +110,7 @@ function applyV1(db: Database.Database): void {
 }
 
 /** V2 migration: add dedup_hash to existing DBs that were created under V1. */
-function applyV2(db: Database.Database): void {
+function applyV2(db: Database): void {
   // Check if dedup_hash column already exists
   const cols = db.prepare("PRAGMA table_info(messages)").all() as { name: string }[];
   if (cols.some((c) => c.name === "dedup_hash")) return;
@@ -135,7 +135,7 @@ function applyV2(db: Database.Database): void {
   }
 }
 
-function setupFts5(db: Database.Database): void {
+function setupFts5(db: Database): void {
   // Fix 23: SAVEPOINT for atomic FTS5 setup
   try {
     db.prepare("SAVEPOINT fts_setup").run();
@@ -185,7 +185,7 @@ export function computeDedupHash(role: string, timestamp: number, contentText: s
     .slice(0, 16);
 }
 
-export function hasFts5(db: Database.Database): boolean {
+export function hasFts5(db: Database): boolean {
   try {
     const row = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='messages_fts'").get();
     return !!row;

@@ -10,7 +10,7 @@
  * Fix 24: Bounded getAllSummaries with LIMIT
  */
 
-import type Database from "better-sqlite3";
+import type { Database } from "bun:sqlite";
 import { uuid, estimateTokens, extractSearchableText, sanitizeFtsQuery } from "../utils.js";
 import { hasFts5, computeDedupHash } from "./schema.js";
 
@@ -75,10 +75,10 @@ export interface LcmStats {
 // ── Store ─────────────────────────────────────────────────────────
 
 export class LcmStore {
-  private db: Database.Database;
+  private db: Database;
   private fts5Available: boolean;
 
-  constructor(db: Database.Database) {
+  constructor(db: Database) {
     this.db = db;
     this.fts5Available = hasFts5(db);
   }

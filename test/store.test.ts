@@ -1,16 +1,16 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import Database from "better-sqlite3";
+import { describe, it, expect, beforeEach, afterEach } from "bun:test";
+import { Database } from "bun:sqlite";
 import { LcmStore } from "../src/db/store.js";
 import { runMigrations } from "../src/db/schema.js";
 
-let db: Database.Database;
+let db: Database;
 let store: LcmStore;
 
 beforeEach(() => {
   db = new Database(":memory:");
-  db.pragma("journal_mode = WAL");
-  db.pragma("busy_timeout = 5000");
-  db.pragma("foreign_keys = ON");
+  db.exec("PRAGMA journal_mode = WAL");
+  db.exec("PRAGMA busy_timeout = 5000");
+  db.exec("PRAGMA foreign_keys = ON");
   runMigrations(db);
   store = new LcmStore(db);
 });

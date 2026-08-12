@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "bun:test";
 import { LCM_SYSTEM_PREAMBLE } from "../src/context.js";
 
 describe("Prompt cache safety", () => {
