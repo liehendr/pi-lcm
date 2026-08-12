@@ -31,13 +31,26 @@ pi-lcm fixes this. Every message is stored permanently in SQLite. When compactio
 ## Install
 
 ```bash
-# From npm
+# From npm (published package)
 pi install npm:pi-lcm
+```
 
-# From source (development)
+### Local install
+
+Install directly from a local checkout — no npm publish needed:
+
+```bash
 git clone https://github.com/codexstar69/pi-lcm.git
 cd pi-lcm
 pnpm install
+pi install ./
+```
+
+`pi install` registers the extension so Pi loads it on every launch. Verify with `pi list`.
+
+For a one-off load during development instead:
+
+```bash
 pi -e ./index.ts
 ```
 
